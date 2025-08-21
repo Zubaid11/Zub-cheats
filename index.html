@@ -3,11 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zub Cheat Register</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,68 +36,142 @@
     .input-box {
       padding: 12px 18px;
       margin: 8px 0;
-      border: 1px solid #00ff88;
-      border-radius: 5px;
-      background: transparent;
-      color: #00ff88;
+      border: none;
+      border-radius: 8px;
       font-size: 1rem;
+      outline: none;
+      background-color: #111;
+      color: #00ff88;
+      box-shadow: 0 0 10px #00ff88;
+      width: 300px;
     }
 
     .signup-btn {
-      padding: 12px 20px;
-      background: #00ff88;
-      color: #000;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-
-    .signup-btn:hover {
-      background: #00cc66;
-    }
-
-    /* DOWNLOAD SCREEN */
-    .download-section {
-      display: none;
-      height: 100vh;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-
-    .download-section h1 {
-      font-size: 3rem;
-      margin-bottom: 20px;
-    }
-
-    .download-btn {
-      padding: 15px 30px;
+      margin-top: 20px;
+      padding: 12px 26px;
       font-size: 1.2rem;
       background: #00ff88;
       color: #000;
-      text-decoration: none;
-      border-radius: 5px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
       font-weight: bold;
     }
 
+    .signup-btn:hover {
+      background: #00ffaa;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-top: 40px;
+      text-align: center;
+      text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
+      position: relative;
+      z-index: 2;
+    }
+
+    .search-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .search-box {
+      width: 300px;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 20px;
+      font-size: 1rem;
+      outline: none;
+      background-color: #111;
+      color: #00ff88;
+      box-shadow: 0 0 15px #00ff88;
+    }
+
+    .search-box::placeholder {
+      color: #00ff8855;
+    }
+
+    .result {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-top: 20px;
+      color: #00ffaa;
+      font-weight: bold;
+      text-shadow: 0 0 10px #00ffaa;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+    }
+
+    .download-section {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 100px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .download-btn {
+      padding: 16px 32px;
+      font-size: 2.2rem;
+      background: linear-gradient(135deg, #00ff88, #00ffaa);
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 15px #00ff88;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
     .download-btn:hover {
-      background: #00cc66;
+      background: linear-gradient(135deg, #000000, #ff0000);
+      box-shadow: 0 0 20px #00ffaa;
+    }
+
+    canvas#matrixCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
     }
   </style>
 </head>
 <body>
-  <!-- Signup Screen -->
+
+  <!-- Signup/Register Screen -->
   <div id="signupScreen">
-    <h2>Zub Cheat Register</h2>
-    <input type="text" placeholder="Enter Username" class="input-box" />
-    <input type="password" placeholder="Enter Password" class="input-box" />
-    <button class="signup-btn" onclick="showDownload()">Register</button>
+    <h2>Register to Access Zub Cheat</h2>
+    <input type="text" class="input-box" placeholder="Full Name" id="name" required />
+    <input type="email" class="input-box" placeholder="Email" id="email" required />
+    <input type="password" class="input-box" placeholder="Password" id="password" required />
+    <button class="signup-btn" onclick="enterSite()">Register</button>
   </div>
 
-  <!-- Download Section -->
+  <!-- Matrix Background -->
+  <canvas id="matrixCanvas"></canvas>
+
+  <!-- Main Website -->
+  <h1>ZUB CHEAT!</h1>
+
+  <div class="search-container">
+    <input
+      class="search-box"
+      type="text"
+      placeholder="Search CHEATS..."
+      oninput="checkSearch(this.value); playTypeSound();"
+    />
+  </div>
+
+  <div id="result" class="result" onclick="showDownloadPage()"></div>
+
   <div class="download-section" id="downloadSection">
     <h1>FF CHEAT</h1>
     <a
@@ -114,19 +183,83 @@
     </a>
   </div>
 
-  <!-- 👇 Ad Network Script -->
-  <script type='text/javascript' src='//pl27466604.profitableratecpm.com/6d/7e/e4/6d7ee4a66283a7cae184d98165686fbc.js'></script>
-
   <!-- Hacker background music -->
   <audio id="bgMusic" autoplay loop>
     <source src="https://files.catbox.moe/yq5cr6.mp3" type="audio/mp3">
   </audio>
 
+  <!-- Typing sound -->
+  <audio id="typeSound">
+    <source src="https://files.catbox.moe/gzafak.mp3" type="audio/mp3">
+  </audio>
+
+  <!-- Scripts -->
   <script>
-    function showDownload() {
-      document.getElementById('signupScreen').style.display = 'none';
-      document.getElementById('downloadSection').style.display = 'flex';
+    // SIGNUP LOGIC
+    function enterSite() {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (name && email && password) {
+        document.getElementById("signupScreen").style.display = "none";
+      } else {
+        alert("Please fill out all fields.");
+      }
     }
+
+    function checkSearch(value) {
+      const result = document.getElementById("result");
+      const section = document.getElementById("downloadSection");
+      section.style.display = "none";
+      if (value.toLowerCase().includes("ff")) {
+        result.textContent = "FF Cheat Click here";
+      } else {
+        result.textContent = "";
+      }
+    }
+
+    function showDownloadPage() {
+      document.getElementById("downloadSection").style.display = "flex";
+    }
+
+    function playTypeSound() {
+      const sound = document.getElementById("typeSound");
+      sound.currentTime = 0;
+      sound.play();
+    }
+
+    // MATRIX ANIMATION
+    const canvas = document.getElementById("matrixCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const letters = "HACKER0123456789";
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = new Array(Math.floor(columns)).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#00ff88";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 50);
   </script>
 </body>
 </html>
